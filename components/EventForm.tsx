@@ -61,7 +61,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSave, onCancel }) => {
                 <input type="text" name="title" value={formData.title} onChange={handleChange} className={inputClass} required />
             </div>
             <div>
-                <label htmlFor="type" className={labelClass}>Event Category (e.g. Music>Concert)</label>
+                <label htmlFor="type" className={labelClass}>Event Category (e.g. Music{'>'}Concert)</label>
                 <input type="text" name="type" value={formData.type} onChange={handleChange} className={inputClass} required />
             </div>
         </div>
