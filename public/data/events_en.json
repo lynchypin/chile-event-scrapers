@@ -1,0 +1,129 @@
+{
+  "last_updated": "2025-11-09T21:22:47.207416-03:00",
+  "event_count": 6,
+  "events": [
+    {
+      "title": "Live and In Person",
+      "artist_team": "Gabo Ruiz",
+      "cost": "$20,000",
+      "description": "Solo stand-up comedy show by comedian Gabo Ruiz.",
+      "venue_name": "Palermo Teatro Bar",
+      "venue_address": "José Manuel Infante 1414, Providencia, Región Metropolitana",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.4475,
+      "longitude": -70.6275,
+      "event_date_time_str": "Domingo 9 de noviembre de 2025, 22:00",
+      "event_date_iso": "2025-11-09T22:00:00",
+      "source_url": "https://comedypass.online",
+      "tags": [
+        "Stand Up Comedy",
+        "Comedy",
+        "Humor",
+        "Monologue"
+      ]
+    },
+    {
+      "title": "National Field Hockey Finals",
+      "artist_team": "Field Hockey Teams (N/A, Sporting Event)",
+      "cost": "Free",
+      "description": "National Field Hockey Finals. The venue features two pitches certified by the International Hockey Federation.",
+      "venue_name": "Estadio Nacional - Centro de Hockey Césped Claudia Schüler",
+      "venue_address": "1420 Avenida Marathon, Ñuñoa (Parque Deportivo Estadio Nacional)",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.4677,
+      "longitude": -70.6123,
+      "event_date_time_str": "Domingo 9 de Noviembre",
+      "event_date_iso": "2026-11-09T00:00:00",
+      "source_url": "https://www.feverup.com",
+      "tags": [
+        "Sport",
+        "Field Hockey",
+        "Finals",
+        "Free"
+      ]
+    },
+    {
+      "title": "The Blue Star",
+      "artist_team": "Dir: Javier Macipe",
+      "cost": "From $3,000 CLP (General Admission)",
+      "description": "The 90s. Mauricio, a Spanish rocker in crisis, travels through Latin America looking to reconnect with his vocation. There, he meets Don Carlos, an elderly musician who takes him in, and together they form an extravagant duo.",
+      "venue_name": "Cineteca Nacional de Chile - Centro Cultural La Moneda",
+      "venue_address": "Plaza de la Ciudadanía #26, Santiago",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.443889,
+      "longitude": -70.653611,
+      "event_date_time_str": "Domingo 9 de Noviembre, 16:00 horas",
+      "event_date_iso": "2026-11-09T16:00:00",
+      "source_url": "https://cclm.cl/",
+      "tags": [
+        "Cinema",
+        "Drama",
+        "Music",
+        "Biopic",
+        "Spanish Cinema"
+      ]
+    },
+    {
+      "title": null,
+      "artist_team": null,
+      "cost": null,
+      "description": null,
+      "venue_name": "Teatro Mori Vitacura",
+      "venue_address": "Avenida Bicentenario 3800, Vitacura",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.4079,
+      "longitude": -70.5905,
+      "event_date_time_str": "Domingo 9 de noviembre, 16:00 horas",
+      "event_date_iso": "2026-11-09T16:00:00",
+      "source_url": "https://www.encancha.cl",
+      "tags": []
+    },
+    {
+      "title": "Hotel O\nRClock",
+      "artist_team": "A des-tiempo Company",
+      "cost": "$8,000 CLP (General Admission)",
+      "description": "A play that explores the fragility of the borders between the tangible and the virtual through the story of Hugo, a young man who dives into a twisted virtual universe. It combines suspense, humor, and social criticism. Age: +15 years.",
+      "venue_name": "Teatro Mori Recoleta",
+      "venue_address": "Bellavista 77, Recoleta",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.4326,
+      "longitude": -70.6382,
+      "event_date_time_str": "Domingo 9 de noviembre, 19.30 horas",
+      "event_date_iso": "2026-11-09T19:30:00",
+      "source_url": "https://www.teatromori.com",
+      "tags": [
+        "Theater",
+        "Drama",
+        "Suspense",
+        "Social Criticism",
+        "Technology"
+      ]
+    },
+    {
+      "title": "I'm the Only One Who Doesn't Know Myself",
+      "artist_team": "Felipe Izquierdo",
+      "cost": "$18,000 CLP (General Admission)",
+      "description": "A solo stand-up show featuring Felipe Izquierdo's characteristic and challenging humor, which invites the audience to question the reality around us and laugh at the confusion. Duration: 60 minutes. Age: 15+ years.",
+      "venue_name": "Teatro Mori Vitacura",
+      "venue_address": "Av. Bicentenario #3800, Vitacura",
+      "image_url": "",
+      "banner_url": "",
+      "latitude": -33.4079,
+      "longitude": -70.5905,
+      "event_date_time_str": "Domingo 9 de noviembre, 19.30 horas",
+      "event_date_iso": "2026-11-09T19:30:00",
+      "source_url": "https://www.centromori.cl",
+      "tags": [
+        "Stand Up Comedy",
+        "Humor",
+        "Theater",
+        "Solo Show"
+      ]
+    }
+  ]
+}
