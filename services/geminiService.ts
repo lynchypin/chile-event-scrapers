@@ -80,7 +80,15 @@ const fetchEvents = async (language: 'es' | 'en'): Promise<EventItem[]> => {
     // 3. Sort events by the correct date field 'event_date_iso'.
     // The pipeline already prunes past events, so no date shifting is needed for the live app.
     // The sorting is still a good practice.
-    return events.sort((a, b) => new Date(a.event_date_iso).getTime() - new Date(b.event_date_iso).getTime());
+    const getEventDateIso = (event: EventItem): string | undefined => {
+      // Some versions of the data/type may use different field names; coerce to any and try common names.
+      return (event as any).event_date_iso ?? (event as any).eventDateIso ?? (event as any).event_date ?? (event as any).eventDate ?? (event as any).startDate;
+    };
+    return events.sort((a, b) => {
+      const da = Date.parse(getEventDateIso(a) ?? '') || 0;
+      const db = Date.parse(getEventDateIso(b) ?? '') || 0;
+      return da - db;
+    });
 
   } catch (error) {
     console.error("Error fetching static event data:", error);
