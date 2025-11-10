@@ -1,28 +1,7 @@
 {
-  "last_updated": "2025-11-09T21:22:46.466068-03:00",
-  "event_count": 6,
+  "last_updated": "2025-11-09T22:05:04.250455-03:00",
+  "event_count": 5,
   "events": [
-    {
-      "title": "Vivo y en Vivo",
-      "artist_team": "Gabo Ruiz",
-      "cost": "$20.000",
-      "description": "Show unipersonal de stand-up del comediante Gabo Ruiz.",
-      "venue_name": "Palermo Teatro Bar",
-      "venue_address": "José Manuel Infante 1414, Providencia, Región Metropolitana",
-      "image_url": "",
-      "banner_url": "",
-      "latitude": -33.4475,
-      "longitude": -70.6275,
-      "event_date_time_str": "Domingo 9 de noviembre de 2025, 22:00",
-      "event_date_iso": "2025-11-09T22:00:00",
-      "source_url": "https://comedypass.online",
-      "tags": [
-        "Stand Up Comedy",
-        "Comedia",
-        "Humor",
-        "Monólogo"
-      ]
-    },
     {
       "title": "Finales Nacionales de Hockey Césped",
       "artist_team": "Equipos de Hockey Césped (N/A, Evento Deportivo)",
