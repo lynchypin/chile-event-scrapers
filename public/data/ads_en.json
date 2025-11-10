@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ad-cafe-cordillera",
+    "title": "Café Cordillera",
+    "description": "Your perfect pause. Specialty coffee and artisan pastries in the heart of Providencia. Bring a friend!",
+    "imageUrl": "https://picsum.photos/seed/CafeAd/600/400",
+    "sponsor": "Café Cordillera",
+    "url": "https://example.com"
+  },
+  {
+    "id": "ad-sky-costanera",
+    "title": "Sky Costanera",
+    "description": "See Santiago from the highest viewpoint in Latin America. An unforgettable 360° view. Buy tickets online.",
+    "imageUrl": "https://picsum.photos/seed/SkyCostanera/600/400",
+    "sponsor": "Sky Costanera",
+    "url": "https://example.com"
+  }
+]
