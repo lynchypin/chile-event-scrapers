@@ -1,0 +1,66 @@
+name: Scrape Events
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      scraper:
+        description: 'Which scraper to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - puntoticket
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  scrape-puntoticket:
+    if: ${{ github.event.inputs.scraper == 'puntoticket' || github.event.inputs.scraper == 'all' || github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+      
+      - name: Run PuntoTicket scraper
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          HEADLESS: 'true'
+          LOG_LEVEL: 'info'
+        run: npm run scrape:puntoticket
+      
+      - name: Upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs
+          path: logs/
+          retention-days: 7
+
+  notify-completion:
+    needs: [scrape-puntoticket]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check job results
+        run: |
+          echo "Scraping jobs completed"
+          echo "PuntoTicket: ${{ needs.scrape-puntoticket.result }}"

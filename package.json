@@ -1,26 +1,33 @@
 {
-  "name": "copy-of-hundreds-events-v2-of-santiago-event-finder",
-  "private": true,
-  "version": "0.0.0",
+  "name": "chile-event-scrapers",
+  "version": "1.0.0",
+  "description": "Centralized event scrapers for Chile - collecting events from multiple sources",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "scrape:puntoticket": "node src/scrapers/puntoticket/index.js",
+    "scrape:all": "node src/run-all.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint src/",
+    "validate": "node src/post-processing/validate.js"
   },
   "dependencies": {
-    "@google/genai": "^1.28.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "@supabase/supabase-js": "^2.45.0",
+    "playwright": "^1.48.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "p-queue": "^8.0.1",
+    "p-retry": "^6.2.0",
+    "winston": "^3.14.0",
+    "date-fns": "^3.6.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.17",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "eslint": "^9.12.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
