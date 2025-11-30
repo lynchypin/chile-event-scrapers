@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
 
-# Environment
+# Environment files
 .env
 .env.local
 .env.*.local
@@ -9,9 +9,13 @@ node_modules/
 # Logs
 logs/
 *.log
-npm-debug.log*
 
-# OS
+# Archive and containers
+archive/
+scraper_containers/
+puntoticket/
+
+# OS files
 .DS_Store
 Thumbs.db
 
@@ -20,14 +24,3 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
-
-# Build
-dist/
-build/
-
-# Test
-coverage/
-
-# Playwright
-playwright-report/
-test-results/

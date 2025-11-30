@@ -53,8 +53,7 @@ This project is a **modular event scraping system** designed to collect event da
 ```
 chile-event-scrapers/
 ├── .github/workflows/
-│   ├── scrape.yml          # Main scraper workflow (daily)
-│   └── pipeline.yml        # Legacy/alternative pipeline
+│   └── scrape.yml          # Main scraper workflow (daily)
 ├── src/
 │   ├── lib/                # Shared utilities
 │   │   ├── browser.js      # Playwright browser setup with stealth
@@ -70,8 +69,19 @@ chile-event-scrapers/
 │   ├── post-processing/
 │   │   └── validate.js     # Data validation utilities
 │   └── run-all.js          # Run all scrapers sequentially
+├── puntoticket/            # Standalone packaged scraper (gitignored)
+│   ├── lib/                # Self-contained utilities
+│   ├── scraper.js          # Main scraper
+│   ├── package.json        # Dependencies
+│   ├── Dockerfile          # Container build
+│   ├── ARCHITECTURE.md     # Architecture diagram
+│   └── BLUEPRINT.md        # Implementation details
+├── scraper_containers/     # Alternative container builds (gitignored)
+├── archive/                # Archived/test files (gitignored)
 ├── .env.local              # Local environment variables (not committed)
+├── .gitignore              # Git ignore rules
 ├── package.json
+├── README.md
 └── HANDOVER.md             # This document
 ```
 

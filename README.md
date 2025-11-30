@@ -25,15 +25,21 @@ npm run scrape:all
 HEADLESS=false npm run scrape:puntoticket
 ```
 
-## Architecture
+## Project Structure
 
 ```
-src/
-├── lib/           # Shared utilities
-├── scrapers/      # Individual scrapers
-│   └── puntoticket/
-├── post-processing/  # Validation, enrichment, deduplication
-└── run-all.js
+chile-event-scrapers/
+├── src/                    # Main source code
+│   ├── lib/                # Shared utilities
+│   ├── scrapers/           # Individual scrapers
+│   │   └── puntoticket/
+│   ├── post-processing/    # Validation, enrichment
+│   └── run-all.js
+├── puntoticket/            # Standalone packaged scraper (gitignored)
+├── scraper_containers/     # Docker container builds (gitignored)
+├── archive/                # Archived test files (gitignored)
+├── .github/workflows/      # CI/CD pipelines
+└── HANDOVER.md             # Full system documentation
 ```
 
 ## Adding New Scrapers
