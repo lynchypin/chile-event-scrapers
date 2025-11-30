@@ -198,7 +198,7 @@ async function scrapeEventPage(context, url) {
         }
         return null;
       };
-      
+
       const getAttr = (selectors, attr) => {
         for (const sel of selectors) {
           const el = document.querySelector(sel);
@@ -208,7 +208,7 @@ async function scrapeEventPage(context, url) {
         }
         return null;
       };
-      
+
       const getAllText = (selectors) => {
         for (const sel of selectors) {
           const els = document.querySelectorAll(sel);
@@ -218,84 +218,131 @@ async function scrapeEventPage(context, url) {
         }
         return [];
       };
-      
+
       const title = getText([
         'h1', '.event-title', '.evento-titulo', '[class*="event-name"]',
         '[class*="event-title"]', '.title', 'meta[property="og:title"]'
       ]) || getAttr(['meta[property="og:title"]'], 'content');
-      
+
       const description = getText([
         '.event-description', '.evento-descripcion', '[class*="description"]',
         '.description', '.detalle', 'meta[property="og:description"]'
       ]) || getAttr(['meta[property="og:description"]'], 'content');
-      
+
       const longDescription = getText([
         '.event-details', '.evento-detalles', '[class*="long-description"]',
         '.full-description', '.content-description', 'article'
       ]);
-      
+
       const venue = getText([
         '.venue', '.lugar', '[class*="venue"]', '[class*="location-name"]',
         '.event-venue', '.recinto', '[class*="place"]'
       ]);
-      
+
       const address = getText([
         '.address', '.direccion', '[class*="address"]', '.location-address',
         '.event-address', '[class*="ubicacion"]'
       ]);
-      
+
       const dateText = getText([
         '.event-date', '.fecha', '[class*="date"]', '.when',
         '.event-when', '[class*="fecha"]', 'time'
       ]) || getAttr(['time'], 'datetime');
-      
+
       const timeText = getText([
         '.event-time', '.hora', '[class*="time"]:not([class*="datetime"])',
         '.when-time', '[class*="hora"]'
       ]);
-      
-      const priceText = getText([
-        '.price', '.precio', '[class*="price"]', '.event-price',
-        '[class*="precio"]', '.ticket-price'
-      ]);
-      
+
+      // Improved price extraction for PuntoTicket
+      let priceText = null;
+      const priceEls = document.querySelectorAll('.precio-total, [class*="precio-total"]');
+      for (const el of priceEls) {
+        const text = el.textContent.trim();
+        if (text.includes('$')) {
+          priceText = text;
+          break;
+        }
+      }
+      if (!priceText) {
+        priceText = getText([
+          '.price', '.precio', '[class*="price"]', '.event-price',
+          '[class*="precio"]', '.ticket-price'
+        ]);
+      }
+
       const category = getText([
         '.category', '.categoria', '[class*="category"]',
         '.event-category', '[class*="categoria"]', '.genre'
       ]);
-      
+
+      // Improved image extraction for PuntoTicket
       const images = [];
+
+      // First priority: og:image meta tag (usually highest quality)
+      const ogImage = getAttr(['meta[property="og:image"]'], 'content');
+      if (ogImage && !ogImage.includes('ico-ticket') && !ogImage.includes('landing-2021')) {
+        images.push({ url: ogImage, alt: 'Event Image', width: null, height: null, priority: 1 });
+      }
+
+      // Second priority: Event-specific images from ptocdn.net
+      const eventImgs = document.querySelectorAll('img[src*="ptocdn.net"], img[src*="eventos"]');
+      eventImgs.forEach(img => {
+        const src = img.src || img.dataset.src;
+        if (src && !src.includes('ico-ticket') && !src.includes('landing-2021') && !src.includes('logo')) {
+          images.push({
+            url: src,
+            alt: img.alt || null,
+            width: img.naturalWidth || null,
+            height: img.naturalHeight || null,
+            priority: 2
+          });
+        }
+      });
+
+      // Third priority: img_artist_thumb class (PuntoTicket specific)
+      const artistImg = document.querySelector('img.img_artist_thumb, img.img-responsive');
+      if (artistImg) {
+        const src = artistImg.src || artistImg.dataset.src;
+        if (src && !src.includes('ico-ticket') && !src.includes('landing-2021')) {
+          images.push({
+            url: src,
+            alt: artistImg.alt || null,
+            width: artistImg.naturalWidth || null,
+            height: artistImg.naturalHeight || null,
+            priority: 2
+          });
+        }
+      }
+
+      // Generic image selectors as fallback
       const imgSelectors = [
         '.event-image img', '.evento-imagen img', '[class*="event-image"] img',
         '.gallery img', '.carousel img', 'picture img', '.main-image img',
         'img[class*="event"]', 'img[class*="poster"]', 'figure img'
       ];
-      
+
       for (const sel of imgSelectors) {
         const imgs = document.querySelectorAll(sel);
         imgs.forEach(img => {
           const src = img.src || img.dataset.src;
-          if (src && !src.startsWith('data:')) {
+          if (src && !src.startsWith('data:') && !src.includes('ico-ticket') && !src.includes('landing-2021') && !src.includes('logo')) {
             images.push({
               url: src,
               alt: img.alt || null,
               width: img.naturalWidth || null,
-              height: img.naturalHeight || null
+              height: img.naturalHeight || null,
+              priority: 3
             });
           }
         });
       }
-      
-      const ogImage = getAttr(['meta[property="og:image"]'], 'content');
-      if (ogImage) {
-        images.unshift({ url: ogImage, alt: 'Open Graph Image', width: null, height: null });
-      }
-      
+
       const ticketUrl = getAttr([
         'a[href*="comprar"]', 'a[href*="ticket"]', 'a[href*="entradas"]',
         '.buy-ticket', '.comprar', 'a.btn-primary'
       ], 'href') || window.location.href;
-      
+
       return {
         title,
         description,
@@ -311,63 +358,81 @@ async function scrapeEventPage(context, url) {
         sourceUrl: window.location.href
       };
     });
-    
-    const images = await extractAllImages(page, [
-      '.event-image img', '.evento-imagen img', 'picture img',
-      '.gallery img', '.carousel img', 'img[class*="event"]'
-    ]);
-    
-    const bestImage = selectBestImage(images.length > 0 ? images : eventData.images);
-    
+
+    // Filter and select best image - prioritize images from eventData.images which are sorted by priority
+    const validImages = (eventData.images || []).filter(img =>
+      img.url &&
+      !img.url.includes('ico-ticket') &&
+      !img.url.includes('landing-2021') &&
+      !img.url.includes('logo') &&
+      !img.url.includes('facebook.svg') &&
+      !img.url.includes('twitter.svg')
+    );
+
+    // Sort by priority (lower is better)
+    validImages.sort((a, b) => (a.priority || 99) - (b.priority || 99));
+
+    // Get best image (first one after sorting, or try extractAllImages as fallback)
+    let bestImageUrl = validImages.length > 0 ? validImages[0].url : null;
+
+    if (!bestImageUrl) {
+      const extractedImages = await extractAllImages(page, [
+        'img[src*="ptocdn.net"]', 'img[src*="eventos"]', 'img.img_artist_thumb',
+        '.event-image img', '.evento-imagen img', 'picture img'
+      ]);
+      const bestExtracted = selectBestImage(extractedImages);
+      bestImageUrl = bestExtracted?.url || null;
+    }
+
     const dateInfo = parseDateRange(eventData.dateText);
     const priceInfo = parsePrice(eventData.priceText);
     const time = parseTime(eventData.timeText);
-    
+
     if (dateInfo.start && time) {
       const [hours, minutes] = time.split(':');
       dateInfo.start.setHours(parseInt(hours), parseInt(minutes));
     }
-    
+
     const externalId = extractExternalId(url);
     const cleanedTitle = cleanTitle(eventData.title);
-    
+
     const locationParts = [eventData.venue, eventData.address].filter(Boolean);
     const comuna = extractComuna(eventData.address || eventData.venue || '');
-    
+
     const formattedEvent = {
       external_id: externalId,
       source: CONFIG.source,
       source_url: url,
-      
+
       title: cleanedTitle,
       description: eventData.description,
       long_description: eventData.longDescription,
-      
+
       start_date: dateInfo.start ? dateInfo.start.toISOString() : null,
       end_date: dateInfo.end ? dateInfo.end.toISOString() : null,
       event_occurrences: dateInfo.occurrences.length > 0 ? dateInfo.occurrences : null,
-      
+
       venue: eventData.venue,
       address: eventData.address,
       comuna: comuna,
       location: locationParts.join(', ') || null,
-      
-      image_url: bestImage?.url || null,
-      images: images.length > 0 ? images : (eventData.images || null),
-      
+
+      image_url: bestImageUrl,
+      images: validImages.length > 0 ? validImages : null,
+
       category_original: eventData.category,
       category_english: mapCategory(eventData.category),
-      
+
       price: priceInfo.text,
       price_min: priceInfo.min,
       price_max: priceInfo.max,
       currency: priceInfo.currency,
-      
-      homepage_url: CONFIG.baseUrl,
+
+      homepage_url: url,
       ticket_url: eventData.ticketUrl ? normalizeUrl(eventData.ticketUrl, CONFIG.baseUrl) : url,
-      
+
       validation_status: 'pending',
-      scrape_version: '2.0',
+      scrape_version: '2.1',
       raw_data: eventData
     };
     
